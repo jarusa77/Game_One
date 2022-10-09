@@ -7,6 +7,9 @@ public class Enemy : MonoBehaviour
 
     public int MaxHealth;
     int CurrentHealth;
+    public int attackDamage=5;
+
+    private bool enemyDied;
 
     private Animator EnemyAnimator;
 
@@ -16,19 +19,21 @@ public class Enemy : MonoBehaviour
     {
         CurrentHealth = MaxHealth;
         EnemyAnimator = GetComponent<Animator>();
+        enemyDied = false;
     }
 
     public void TakeDamage(int damage)
     {
         CurrentHealth -= damage;
 
-        //toDo hurt animation
         if(EnemyAnimator != null)
-            EnemyAnimator.SetBool("damage", true);
+            EnemyAnimator.SetBool("Damage", true);
 
         if (CurrentHealth < 0)
         {
-            Die();
+            EnemyAnimator.SetBool("Die", true);
+            //Die();
+            enemyDied = true;
         }
 
     }
@@ -38,7 +43,19 @@ public class Enemy : MonoBehaviour
         //disable enemy
         Debug.Log("Enemy has Died!");
 
+
+
         Destroy(gameObject);
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D player)
+    {
+        if (player.gameObject.CompareTag("Player") && !enemyDied)
+        {
+            player.gameObject.GetComponent<PlayerAction>().TakeDamage(attackDamage);
+            Debug.Log("Player was damaged");
+        }
     }
 
 }

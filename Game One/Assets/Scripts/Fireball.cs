@@ -49,5 +49,8 @@ public class Fireball : MonoBehaviour
 
 
     }
+
+    public void  DestroyFirball() => Destroy(gameObject);
+    
         
  }

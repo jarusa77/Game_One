@@ -43,8 +43,6 @@ public class Casting : MonoBehaviour
         if (context.performed)
         {
 
-            
-
             if (!canCast)
                 return;
 
@@ -52,15 +50,15 @@ public class Casting : MonoBehaviour
 
             canCast = false;
 
-
-            GameObject si = Instantiate(spellItem, castPoint);
-            si.transform.parent = null;
-
             Anim.SetTrigger("Cast");
         }
 
+    }
 
-            
-
+    public void ReleaseCast()
+    {
+        UnityEngine.Debug.Log("Release Cast");
+        GameObject si = Instantiate(spellItem, castPoint); //creates Spell
+        si.transform.parent = null; //Releases  spell from Player
     }
 }
