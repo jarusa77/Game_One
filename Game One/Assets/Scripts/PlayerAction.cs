@@ -31,6 +31,8 @@ public class PlayerAction : MonoBehaviour
     private float stunTimer = Mathf.Infinity;
     public float stunTime = 2f;
 
+    private float direction = 1;//determines direction based on  facing 
+
     private Animator PlayerAnimator;
 
     // Start is called before the first frame update
@@ -113,12 +115,14 @@ public class PlayerAction : MonoBehaviour
         if (PlayerAnimator != null)
             PlayerAnimator.SetBool("Damage", true);
 
-        
 
+        /*
         if (isFacingRight)
             rb.velocity = new Vector2(bounceBack * -1, bounceBack);
         else
             rb.velocity = new Vector2(bounceBack, bounceBack);
+        */
+        rb.velocity = new Vector2(bounceBack * -1 * direction, bounceBack);
 
         stunTimer = 0;
 
@@ -128,7 +132,7 @@ public class PlayerAction : MonoBehaviour
         if (CurrentHealth < 0)
         {
             Die();
-        }
+        } 
 
     }
 
@@ -182,6 +186,7 @@ public class PlayerAction : MonoBehaviour
         Vector3 localScale = transform.localScale;
         localScale.x *= -1f;
         transform.localScale = localScale;
+        direction *= -1f;
     }
 
     public void Attack(InputAction.CallbackContext context)
