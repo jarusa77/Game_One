@@ -116,18 +116,9 @@ public class PlayerAction : MonoBehaviour
             PlayerAnimator.SetBool("Damage", true);
 
 
-        /*
-        if (isFacingRight)
-            rb.velocity = new Vector2(bounceBack * -1, bounceBack);
-        else
-            rb.velocity = new Vector2(bounceBack, bounceBack);
-        */
         rb.velocity = new Vector2(bounceBack * -1 * direction, bounceBack);
 
         stunTimer = 0;
-
-        //rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
-
 
         if (CurrentHealth < 0)
         {
