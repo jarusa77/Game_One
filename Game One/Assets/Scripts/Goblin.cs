@@ -66,9 +66,13 @@ public class Goblin : Enemy
         {
             Transform SightObject = Sight.transform;
 
-            if (SightObject.gameObject.CompareTag("Player"))
-                inRange = true;
+            
 
+            if (SightObject.gameObject.CompareTag("Player"))
+            {
+                inRange = true;
+                player = Sight.transform;
+            }
         }
 
         return inRange;
@@ -99,12 +103,19 @@ public class Goblin : Enemy
     {
         Collider2D[] hitPlayers = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayers);
 
-        Debug.Log("Damage Called");
+        //Debug.Log("Damage Called");
 
         foreach (Collider2D hitPlayer in hitPlayers)
         {
             hitPlayer.GetComponent<PlayerAction>().TakeDamage(attackDamage);
             Debug.Log(hitPlayer.name + " was damaged");
+
+            //if (player = null)
+                player = hitPlayer.transform;
+
+            if ((transform.position.x > player.position.x && isFacingRight) || 
+                (transform.position.x < player.position.x && !isFacingRight))
+                Flip();
         }
 
     }
@@ -118,14 +129,14 @@ public class Goblin : Enemy
         if (pauseTimer <= pauseTime)
             return;
 
-        Debug.Log(" edge found");
+        //Debug.Log(" edge found");
 
         RaycastHit2D groundInfo = Physics2D.Raycast(sight.position, Vector2.down, distanceDown);
         Transform groundObject = groundInfo.transform;
 
         if (!groundInfo.collider && !paused)
         {
-            Debug.Log(" edge found");
+            //Debug.Log(" edge found");
             slowDown -= 0.20F;
 
             if (slowDown < 0)
@@ -181,9 +192,12 @@ public class Goblin : Enemy
             EnemyAnimator.SetBool("Damage", true);
 
 
-        if ((transform.position.x > player.position.x && isFacingRight) || (transform.position.x < player.position.x && !isFacingRight))
-            Flip();
-
+        if (player != null)
+        {
+            if ((transform.position.x > player.position.x && isFacingRight) ||
+                (transform.position.x < player.position.x && !isFacingRight))
+                Flip();
+        }
 
 
         if (CurrentHealth < 0)

@@ -9,11 +9,13 @@ public class PlayerAction : MonoBehaviour
     public LayerMask floorLayer;
     public Transform attackPoint;
     public LayerMask enemyLayers;
+    public Transform SpawnPoint;
 
 
     [Header("Attributes")]
     public int CurrentHealth;
     public int MaxHealth = 50;
+    public int lifes = 3;
     public float speed;
     public float jumpingPower;
     public int attackDamage = 10;
@@ -23,13 +25,15 @@ public class PlayerAction : MonoBehaviour
     [Header("States")]
     public bool OnGround;
     public int PlayerState;
-    
+    private bool PlayerDied;
+
 
     private float horizontal;
     private bool isFacingRight = true;
     private enum Status { idle, walk, jump, attack, jumpAttack }
     private float stunTimer = Mathf.Infinity;
     public float stunTime = 2f;
+    
 
     private float direction = 1;//determines direction based on  facing 
 
@@ -43,6 +47,9 @@ public class PlayerAction : MonoBehaviour
         PlayerState = (int)Status.idle;
         PlayerAnimator.SetInteger("Player State", PlayerState);
         CurrentHealth = MaxHealth;
+        PlayerDied = false;
+
+        //Player.transform.position = StartPoint.transform.position;
     }
 
     // Update is called once per frame
@@ -51,6 +58,7 @@ public class PlayerAction : MonoBehaviour
 
         stunTimer += Time.deltaTime;
 
+        
         if (isStunned())
             return;
 
@@ -120,17 +128,49 @@ public class PlayerAction : MonoBehaviour
 
         stunTimer = 0;
 
-        if (CurrentHealth < 0)
+        if (CurrentHealth <= 0)
         {
-            Die();
+            PlayerAnimator.SetBool("Died", true);
+            PlayerDied = true;
         } 
 
     }
 
     public void Die()
     {
+        //disable enemy
 
-        //todo
+        gameObject.SetActive(false);
+        Debug.Log("Player has Died!");
+        lifes -= 1;
+
+        if (lifes > 0)
+            Respawn();
+        else
+        {
+            //toDo Game Over
+            Debug.Log("Game Over");
+        }
+
+
+
+    }
+
+
+    public void Respawn()
+    {
+        Debug.Log("Respawn");
+
+        //if (SpawnPoint != null)
+          //  return;
+
+        transform.position = SpawnPoint.transform.position;
+        transform.rotation = SpawnPoint.transform.rotation;
+        CurrentHealth = MaxHealth;
+        PlayerDied = false;
+        gameObject.SetActive(true);
+
+
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -148,7 +188,7 @@ public class PlayerAction : MonoBehaviour
         if (isStunned())
             return;
 
-        UnityEngine.Debug.Log("Jump");
+        //UnityEngine.Debug.Log("Jump");
 
 
 
@@ -226,6 +266,12 @@ public class PlayerAction : MonoBehaviour
           enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
             Debug.Log(enemy.name + " was damaged");
         }
+
+    }
+
+    public void SetSpawnPoint(Transform SP)
+    {
+        SpawnPoint =SP;
 
     }
 

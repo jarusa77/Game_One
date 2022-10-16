@@ -178,8 +178,10 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 256
-  CurrentHealth: 0
+  SpawnPoint: {fileID: 0}
+  CurrentHealth: 50
   MaxHealth: 50
+  lifes: 3
   speed: 5
   jumpingPower: 7.5
   attackDamage: 10
