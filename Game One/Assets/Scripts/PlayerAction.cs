@@ -25,7 +25,6 @@ public class PlayerAction : MonoBehaviour
     [Header("States")]
     public bool OnGround;
     public int PlayerState;
-    private bool PlayerDied;
 
 
     private float horizontal;
@@ -47,7 +46,7 @@ public class PlayerAction : MonoBehaviour
         PlayerState = (int)Status.idle;
         PlayerAnimator.SetInteger("Player State", PlayerState);
         CurrentHealth = MaxHealth;
-        PlayerDied = false;
+        
 
         //Player.transform.position = StartPoint.transform.position;
     }
@@ -131,7 +130,7 @@ public class PlayerAction : MonoBehaviour
         if (CurrentHealth <= 0)
         {
             PlayerAnimator.SetBool("Died", true);
-            PlayerDied = true;
+            
         } 
 
     }
@@ -167,7 +166,6 @@ public class PlayerAction : MonoBehaviour
         transform.position = SpawnPoint.transform.position;
         transform.rotation = SpawnPoint.transform.rotation;
         CurrentHealth = MaxHealth;
-        PlayerDied = false;
         gameObject.SetActive(true);
 
 
